@@ -18,7 +18,7 @@ class Checking(Account): #property of inheritance: checking derives properties f
     def __init__(self,name,overdraft_fee:int):
         super().__init__(name)
         self.overdraft_fee = overdraft_fee
-    def withdraw(self,amount):
+    def withdraw(self,amount): #property of polymorphism: redefining inherited functions to meet child class needs
         self.balance -= amount
         if self.balance < 0:
             self.balance -= self.overdraft_fee

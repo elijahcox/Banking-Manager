@@ -1,6 +1,7 @@
 from account_classes import Account, Checking, Savings
+import tkinter as tk
 
-x = Checking('John',25)
-x.deposit(15)
-x.withdraw(16)
-print(x.check_balance())
+account_gui = tk.Tk()
+account_gui.title("Elijah's Banking App")
+account_gui.geometry('400x300')
+account_gui.mainloop()
