@@ -23,6 +23,8 @@ class Account: #Abstract account class
     def withdraw(self,amount):#encapsulation to protect balance with getter/setter
         if self.balance - amount >= 0:
             self.balance -= amount
+        else:
+            self.balance = 0
 
     def check_balance(self):#encapsulation to protect balance with getter/setter
         return str(self.balance)

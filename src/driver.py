@@ -32,7 +32,9 @@ def submit_account():
     Q=tk.Button(new_window,text = 'Close', command=new_window.destroy)
     L.grid(row=0,column=0)
     Q.grid(row=1,column=0)
-
+    name.set("")
+    check_var.set("1")
+    save_var.set("1")
 
 def create_account():
     new_window = tk.Toplevel(account_gui)
@@ -130,10 +132,13 @@ def deposit_funds():
 
 def withdraw():
     id = a.get()
-    ret = "Deposited $"+amount.get()+" to " + id
+    ret = "Withdrew $"+amount.get()+" from " + id
     if id[0] == "S":
         if id in bank_storage.savings_accounts:
-            bank_storage.savings_accounts[id].withdraw(int(amount.get()))
+            acc = bank_storage.savings_accounts[id]
+            if int(acc.check_balance()) < int(amount.get()):
+                ret = "Withdrew $"+acc.check_balance()+" from " + id
+            acc.withdraw(int(amount.get()))
         else:
             ret = "ERROR: Account not found"
     else:
@@ -156,7 +161,7 @@ def withdraw_funds():
     new_window = tk.Toplevel(account_gui)
     new_window.title("Funds Withdrawal")
     new_window.geometry("300x90")
-    B=tk.Button(new_window,text = 'Withdraw Funds', command=add_funds)
+    B=tk.Button(new_window,text = 'Withdraw Funds', command=withdraw)
     Q=tk.Button(new_window,text = 'Close', command=new_window.destroy)
     L = tk.Label(new_window,text="Enter Account Number")
     L1 = tk.Label(new_window,text="Enter Amount")
@@ -189,6 +194,6 @@ button3['command'] = deposit_funds
 #if savings and over 0: print error
 button4=tk.Button(account_gui, text="Withdraw Funds",width = 25, height = 13)
 button4.grid(row=2,column=1)
-
+button4['command'] = withdraw_funds
 
 account_gui.mainloop()
