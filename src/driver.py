@@ -3,7 +3,6 @@ import tkinter as tk
 import time
 
 bank_storage = BankManager()
-
 account_gui = tk.Tk()
 account_gui.title("Elijah's Banking App")
 account_gui.geometry('370x412')
