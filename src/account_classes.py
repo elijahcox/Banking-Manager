@@ -1,15 +1,21 @@
+from random import seed
+from random import randint
+seed(1)
+
 class BankManager:
-    user_accounts = {}
-    def add_account(self,acc):
-        self.user_accounts[acc.ID] = acc
+    checking_accounts = {}
+    savings_accounts = {}
+    def add_account(self,acc): #abstraction
+        if acc.ID[0] == 'C':
+            self.checking_accounts[acc.ID] = acc
+        else:
+            self.savings_accounts[acc.ID] = acc
 
 class Account: #Abstract account class
-    num_accounts = 0
     def __init__(self,name,account_type):
-        self.ID = account_type+str(self.num_accounts)
+        self.ID = account_type+str(randint(10,99))
         self.balance = 0
         self.name = name
-        self.num_accounts+=1
    
     def deposit(self,amount): #encapsulation to protect balance with getter/setter
         self.balance += amount
@@ -19,7 +25,7 @@ class Account: #Abstract account class
             self.balance -= amount
 
     def check_balance(self):#encapsulation to protect balance with getter/setter
-        return self.balance
+        return str(self.balance)
 
 class Checking(Account): #property of inheritance: checking derives properties from Account
     def __init__(self,name,overdraft_fee:int):
