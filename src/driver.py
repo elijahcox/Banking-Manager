@@ -1,6 +1,7 @@
-from account_classes import Account, Checking, Savings
+from account_classes import Account, Checking, Savings, BankManager
 import tkinter as tk
 
+'''
 account_gui = tk.Tk()
 account_gui.title("Elijah's Banking App")
 account_gui.geometry('400x400')
@@ -25,3 +26,7 @@ button2.grid(row=2,column=1)
 
 
 account_gui.mainloop()
+'''
+bank_storage = BankManager()
+x = Checking("James Earl",15)
+bank_storage.add_account(x)
