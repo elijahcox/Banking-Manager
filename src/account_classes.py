@@ -1,12 +1,42 @@
 from random import seed
 from random import randint
 from datetime import date
+import sqlite3
+from sqlite3 import Error
+from os.path import exists
+import os
 seed(1)
+
+command = """CREATE TABLE IF NOT EXISTS projects (
+	id integer PRIMARY KEY,
+	name text NOT NULL,
+	begin_date text,
+	end_date text
+);"""
+
 
 class BankManager:
     checking_accounts = {}
     savings_accounts = {}
+
+    def __init__(self):
+        self.load_db()
     
+    def load_db(self):
+        path = os.getcwd()+"\\db\\bank.db"
+        db_found = exists(path)
+        conn = None
+        try:
+            conn = sqlite3.connect(path) 
+            if db_found != True:
+                cursor = conn.cursor()
+                cursor.execute(command)
+        except Error as e:
+            pass
+        finally:
+            if conn:
+                conn.close()
+
     def create_account(self,name,is_check):
         if is_check == True:
             new_check = Checking(name,25)
@@ -22,8 +52,7 @@ class BankManager:
             self.checking_accounts[acc.ID] = acc
         else:
             self.savings_accounts[acc.ID] = acc
-        
-    
+
     def get_account_by_num(self,num):
         if num[0] == 'C':
             if num in self.checking_accounts:

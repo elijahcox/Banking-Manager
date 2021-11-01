@@ -20,6 +20,10 @@ var/
 .installed.cfg
 *.egg
 
+# Database information
+db/
+.db
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
