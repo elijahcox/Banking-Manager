@@ -18,7 +18,20 @@ class BankManager:
                 return self.checking_accounts[num]
         elif num[0] == 'S':
             if num in self.savings_accounts:
-                return self.savings_accounts[num]        
+                return self.savings_accounts[num]
+
+    def get_account_by_name(self,name):
+        accs = []
+        
+        for k,v in self.checking_accounts.items():
+            if v.get_name() == name:
+                accs.append(v)
+        
+        for k,v in self.savings_accounts.items():
+            if v.get_name() == name:
+                accs.append(v)
+        
+        return accs
 
 class Account: #Abstract account class
     def __init__(self,name,account_type):
@@ -26,6 +39,15 @@ class Account: #Abstract account class
         self.balance = 0
         self.name = name
         self.created_date = date.today().strftime("%d/%m/%Y")
+
+    def get_name(self):
+        return self.name
+    
+    def get_ID(self):
+        return self.ID
+
+    def get_balance(self):#encapsulation to protect balance with getter/setter
+        return str(self.balance)
 
     def deposit(self,amount): #encapsulation to protect balance with getter/setter
         self.balance += amount
@@ -36,18 +58,16 @@ class Account: #Abstract account class
         else:
             self.balance = 0
 
-    def check_balance(self):#encapsulation to protect balance with getter/setter
-        return str(self.balance)
-
 class Checking(Account): #property of inheritance: checking derives properties from Account
     def __init__(self,name,overdraft_fee:int):
         super().__init__(name,"C")
         self.overdraft_fee = overdraft_fee
+    
     def withdraw(self,amount): #property of polymorphism: overriding inherited functions to meet child class needs
-        self.balance -= amount
-        if self.balance < 0:
-            self.balance -= self.overdraft_fee
-
+        if self.balance > 0:
+            self.balance -= amount
+            if self.balance < 0:
+                self.balance -= self.overdraft_fee
 
 class Savings(Account): #property of inheritance: checking derives properties from Account
     def __init__(self,name):
