@@ -15,7 +15,7 @@ amount = StringVar(account_gui,"")
 
 def submit_account():
     check_bool = (check_var.get() == "")
-    id = bank_storage.create_account(name_var.get(),check_bool)
+    id = bank_storage.add_account(name_var.get(),check_bool)
     new_window = Toplevel(account_gui)
     new_window.geometry("175x50")
     new_window.title("Account Number")

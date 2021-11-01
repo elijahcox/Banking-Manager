@@ -7,12 +7,31 @@ from os.path import exists
 import os
 seed(1)
 
-command = """CREATE TABLE IF NOT EXISTS projects (
+create_checking = """CREATE TABLE IF NOT EXISTS checking (
 	id integer PRIMARY KEY,
 	name text NOT NULL,
 	begin_date text,
-	end_date text
+    balance integer,
+    od_fee integer
 );"""
+create_savings = """CREATE TABLE IF NOT EXISTS savings (
+	id integer PRIMARY KEY,
+	name text NOT NULL,
+	begin_date text,
+    balance integer,
+    interest_rate real
+);"""
+
+def insert_builder(table,val_list):
+    insert = ["INSERT INTO "," VALUES "]
+    assert len(val_list) == 5
+    val_str = "("
+    for i in range(0,5):
+        val_str+=str(val_list[i])
+        if i < 4:
+            val_str+=', '
+    val_str+=");"
+    return insert[0] + table + insert[1]+ val_str
 
 
 class BankManager:
@@ -27,10 +46,20 @@ class BankManager:
         db_found = exists(path)
         conn = None
         try:
-            conn = sqlite3.connect(path) 
-            if db_found != True:
-                cursor = conn.cursor()
-                cursor.execute(command)
+            conn = sqlite3.connect(path)
+            if db_found != True:              
+                conn.cursor().execute(create_checking)
+                conn.cursor().execute(create_savings)
+            else:
+                cur = conn.cursor()
+                test = [["checking",[1,"\"John7\"","\"08/11\"",0,0]],["checking",[2,"\"Joh3n73\"","\"08/11\"",0,0]],["checking",[3,"\"Joh3n2\"","\"08/11\"",0,0]],["checking",[99,"\"Jo3hn2\"","\"08/11\"",0,0]]]
+                for t in test:
+                    cur.execute(insert_builder(t[0],t[1]))
+                conn.commit()
+                cur.execute("SELECT * FROM checking;")
+                rows = cur.fetchall()
+                for row in rows:
+                    print(row)
         except Error as e:
             pass
         finally:
