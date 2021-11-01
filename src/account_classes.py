@@ -6,11 +6,23 @@ seed(1)
 class BankManager:
     checking_accounts = {}
     savings_accounts = {}
+    
+    def create_account(self,name,is_check):
+        if is_check == True:
+            new_check = Checking(name,25)
+            self.add_account(new_check)
+            return new_check.ID
+        else:
+            new_save = Savings(name)
+            self.add_account(Savings(name))
+            return new_save.ID
+
     def add_account(self,acc): #abstraction
         if acc.ID[0] == 'C':
             self.checking_accounts[acc.ID] = acc
         else:
             self.savings_accounts[acc.ID] = acc
+        
     
     def get_account_by_num(self,num):
         if num[0] == 'C':
@@ -19,10 +31,10 @@ class BankManager:
         elif num[0] == 'S':
             if num in self.savings_accounts:
                 return self.savings_accounts[num]
+        return -1
 
     def get_account_by_name(self,name):
         accs = []
-        
         for k,v in self.checking_accounts.items():
             if v.get_name() == name:
                 accs.append(v)
@@ -30,7 +42,6 @@ class BankManager:
         for k,v in self.savings_accounts.items():
             if v.get_name() == name:
                 accs.append(v)
-        
         return accs
 
 class Account: #Abstract account class

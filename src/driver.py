@@ -15,15 +15,7 @@ amount = StringVar(account_gui,"")
 
 def submit_account():
     check_bool = (check_var.get() == "")
-    id = ""
-    if check_bool:
-        new_acc = Checking(name_var.get(),20)
-        id = new_acc.ID
-        bank_storage.add_account(new_acc)
-    else:
-        new_acc = Savings(name_var.get())
-        id = new_acc.ID
-        bank_storage.add_account(new_acc)
+    id = bank_storage.create_account(name_var.get(),check_bool)
     new_window = Toplevel(account_gui)
     new_window.geometry("175x50")
     new_window.title("Account Number")
@@ -47,17 +39,11 @@ def create_account():
 def query_funds():
     id = acc_num_var.get()
     ret = "Balance for " + id + " is $"
-    if id[0] == "S":
-        if id in bank_storage.savings_accounts:
-            ret += bank_storage.savings_accounts[id].check_balance()
-        else:
-            ret = "ERROR: Account not found"
+    acc = bank_storage.get_account_by_num(id)
+    if  acc != -1:
+        ret += acc.get_balance()
     else:
-        if id in bank_storage.checking_accounts:
-            ret += bank_storage.checking_accounts[id].check_balance()
-        else:
-            ret = "ERROR: Account not found"
-    
+        ret = "ERROR: Account not found"
     new_window = Toplevel(account_gui)
     new_window.geometry("175x50")
     new_window.title("Balance")
@@ -77,17 +63,11 @@ def check_funds():
 def add_funds():
     id = acc_num_var.get()
     ret = "Deposited $"+amount.get()+" to " + id
-    if id[0] == "S":
-        if id in bank_storage.savings_accounts:
-            bank_storage.savings_accounts[id].deposit(int(amount.get()))
-        else:
-            ret = "ERROR: Account not found"
+    acc = bank_storage.get_account_by_num(id)    
+    if  acc != -1:
+        acc.deposit(int(amount.get()))
     else:
-        if id in bank_storage.checking_accounts:
-            bank_storage.checking_accounts[id].deposit(int(amount.get()))
-        else:
-            ret = "ERROR: Account not found"
-    
+        ret = "ERROR: Account not found"
     new_window = Toplevel(account_gui)
     new_window.geometry("175x50")
     new_window.title("Deposit Confirmation")
@@ -110,19 +90,11 @@ def deposit_funds():
 def withdraw():
     id = acc_num_var.get()
     ret = "Withdrew $"+amount.get()+" from " + id
-    if id[0] == "S":
-        if id in bank_storage.savings_accounts:
-            acc = bank_storage.savings_accounts[id]
-            if int(acc.check_balance()) < int(amount.get()):
-                ret = "Withdrew $"+acc.check_balance()+" from " + id
-            acc.withdraw(int(amount.get()))
-        else:
-            ret = "ERROR: Account not found"
+    acc = bank_storage.get_account_by_num(id)    
+    if  acc != -1:
+        acc.withdraw(int(amount.get()))
     else:
-        if id in bank_storage.checking_accounts:
-            bank_storage.checking_accounts[id].withdraw(int(amount.get()))
-        else:
-            ret = "ERROR: Account not found"
+        ret = "ERROR: Account not found"
     
     new_window = Toplevel(account_gui)
     new_window.geometry("175x50")
